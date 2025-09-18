@@ -1,0 +1,2 @@
+#path to store dataset
+data_path : "./data/"

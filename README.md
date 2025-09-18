@@ -12,4 +12,10 @@ This report investigates the impact of optimization and regularization hyperpara
 
 ### How to Run
 
+1. Download the CIFAR-10 dataset
+
+```
+python load_cifar.py --config configs/default.yaml
+```
+
 ### Results
