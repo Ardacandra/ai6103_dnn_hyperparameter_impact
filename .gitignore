@@ -10,3 +10,6 @@ __pycache__/
 
 # Sandbox notebook
 sandbox.ipynb
+
+# Network training checkpoints
+.checkpoints/
