@@ -48,7 +48,8 @@ def main(config_path):
     trainloader, testloader = load_cifar_dataset(
         cfg["data_path"],
         transform_train,
-        transform_test
+        transform_test,
+        subset_size=cfg["subset"],
     )
 
     net = ResNet18().to(cfg["device"])

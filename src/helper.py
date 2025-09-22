@@ -4,6 +4,8 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 
+from torch.utils.data import Subset
+
 import os
 
 def load_cifar_dataset(
@@ -11,7 +13,8 @@ def load_cifar_dataset(
     transform_train,
     transform_test,
     train_batch_size=128,
-    test_batch_size=256
+    test_batch_size=256,
+    subset_size=None
 ):
     # ensure the dataset is downloaded once
     if not os.path.exists(os.path.join(root, "cifar-10-batches-py")):
@@ -22,12 +25,17 @@ def load_cifar_dataset(
     trainset = torchvision.datasets.CIFAR10(
         root=root, train=True, download=download, transform=transform_train
     )
-    trainloader = torch.utils.data.DataLoader(
-        trainset, batch_size=train_batch_size, shuffle=True, num_workers=2
-    )
-
     testset = torchvision.datasets.CIFAR10(
         root=root, train=False, download=download, transform=transform_test
+    )
+
+    # for faster iteration during development
+    if subset_size is not None:
+        trainset = Subset(trainset, range(subset_size))
+        testset = Subset(testset, range(subset_size))
+
+    trainloader = torch.utils.data.DataLoader(
+        trainset, batch_size=train_batch_size, shuffle=True, num_workers=2
     )
     testloader = torch.utils.data.DataLoader(
         testset, batch_size=test_batch_size, shuffle=False, num_workers=2
