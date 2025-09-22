@@ -4,14 +4,18 @@ data_path : "./data/"
 #path to store output
 output_path : "./output/"
 
+#run identifier
+run_id : "test_run"
+
 #model training parameters
 # device : "cuda"
 device : "cpu"
 classes : ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 train_batch_size : 128
-test_batch_size : 256
+test_batch_size : 128
 learning_rate : 0.1
 epoch : 15
 learning_rate_schedule : False
 weight_decay : False
 weight_decay_coefficient : 0.0005
+momentum : 0.9

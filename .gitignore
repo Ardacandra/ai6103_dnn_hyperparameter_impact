@@ -13,3 +13,6 @@ sandbox.ipynb
 
 # Network training checkpoints
 .checkpoints/
+
+# Ignore output files
+output/
