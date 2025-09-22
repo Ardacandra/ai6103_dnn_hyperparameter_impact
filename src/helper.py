@@ -67,7 +67,9 @@ def train(epoch, net, criterion, trainloader, scheduler, device, optimizer):
         if (batch_idx+1) % 50 == 0:
           print("iteration : %3d, loss : %0.4f, accuracy : %2.2f" % (batch_idx+1, train_loss/(batch_idx+1), 100.*correct/total))
 
-    scheduler.step()
+    if scheduler is not None:
+        scheduler.step()
+        
     return train_loss/(batch_idx+1), 100.*correct/total
 
 def test(epoch, net, criterion, testloader, device):

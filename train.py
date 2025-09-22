@@ -40,7 +40,7 @@ def main(config_path):
             transforms.ToTensor(),
             transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
         ])
-    else :
+    else:
         transform_train = transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
@@ -60,9 +60,17 @@ def main(config_path):
 
     net = ResNet18().to(cfg["device"])
     criterion = nn.CrossEntropyLoss().to(cfg["device"])
-    optimizer = optim.SGD(net.parameters(), lr=cfg["learning_rate"],
-                        momentum=cfg['momentum'], weight_decay=cfg['weight_decay'])
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
+    optimizer = optim.SGD(
+        net.parameters(), 
+        lr=cfg["learning_rate"],
+        momentum=cfg['momentum'], 
+        weight_decay=cfg['weight_decay']
+    )
+    if cfg["learning_rate_schedule"]:
+        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
+    else:
+        scheduler = None
+
 
     for epoch in range(cfg['epoch']):
         train_loss, train_acc = train(epoch, net, criterion, trainloader, scheduler, cfg["device"], optimizer)
