@@ -88,6 +88,16 @@ def main(config_path):
         
         logger.info(("Epoch : %3d, training loss : %0.4f, training accuracy : %2.2f, test loss " + \
         ": %0.4f, test accuracy : %2.2f") % (epoch, train_loss, train_acc, test_loss, test_acc))  
+
+    csv_path = os.path.join(cfg["output_path"], f"{cfg['run_id']}_train_history.csv")
+    df_hist = pd.DataFrame()
+    df_hist['epoch'] = range(1, len(train_loss_hist)+1)
+    df_hist['train_loss'] = train_loss_hist
+    df_hist['train_acc'] = train_acc_hist
+    df_hist['test_loss'] = test_loss_hist
+    df_hist['test_acc'] = test_acc_hist
+    df_hist.to_csv(csv_path, index=False)
+    logger.info(f"training and validation loss and accuracy saved to {csv_path}")
     
     logger.info("saving training loss and accuracy plots...")
 
