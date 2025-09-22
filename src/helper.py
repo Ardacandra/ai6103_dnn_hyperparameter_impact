@@ -44,8 +44,8 @@ def load_cifar_dataset(
     return trainloader, testloader
 
 # Training
-def train(epoch, net, criterion, trainloader, scheduler, device, optimizer):
-    print('\nEpoch: %d' % epoch)
+def train(epoch, net, criterion, trainloader, scheduler, device, optimizer, logger):
+    logger.info('\nEpoch: %d' % epoch)
     net.train()
     train_loss = 0
     correct = 0
@@ -65,11 +65,11 @@ def train(epoch, net, criterion, trainloader, scheduler, device, optimizer):
         correct += predicted.eq(targets).sum().item()
 
         if (batch_idx+1) % 50 == 0:
-          print("iteration : %3d, loss : %0.4f, accuracy : %2.2f" % (batch_idx+1, train_loss/(batch_idx+1), 100.*correct/total))
+          logger.info("iteration : %3d, loss : %0.4f, accuracy : %2.2f" % (batch_idx+1, train_loss/(batch_idx+1), 100.*correct/total))
 
     if scheduler is not None:
         scheduler.step()
-        
+
     return train_loss/(batch_idx+1), 100.*correct/total
 
 def test(epoch, net, criterion, testloader, device):
@@ -90,9 +90,9 @@ def test(epoch, net, criterion, testloader, device):
 
     return test_loss/(batch_idx+1), 100.*correct/total
 
-def save_checkpoint(net, acc, epoch):
+def save_checkpoint(net, acc, epoch, logger):
     # Save checkpoint.
-    print('Saving..')
+    logger.info('Saving..')
     state = {
         'net': net.state_dict(),
         'acc': acc,

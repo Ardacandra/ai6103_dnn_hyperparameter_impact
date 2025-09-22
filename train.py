@@ -27,8 +27,9 @@ def main(config_path):
         level=logging.INFO,
         format="%(asctime)s - %(levelname)s - %(message)s"
     )
-    logging.info(f"starting network training...")
-    logging.info(f"training parameters : {cfg}")
+    logger = logging.getLogger("Main")
+    logger.info(f"starting network training...")
+    logger.info(f"training parameters : {cfg}")
 
     if cfg["data_augmentation"]:
         # these are commonly used data augmentations
@@ -72,11 +73,11 @@ def main(config_path):
         scheduler = None
 
 
-    for epoch in range(cfg['epoch']):
-        train_loss, train_acc = train(epoch, net, criterion, trainloader, scheduler, cfg["device"], optimizer)
+    for epoch in range(1, cfg['epoch']+1):
+        train_loss, train_acc = train(epoch, net, criterion, trainloader, scheduler, cfg["device"], optimizer, logger)
         test_loss, test_acc = test(epoch, net, criterion, testloader, cfg["device"])
         
-        logging.info(("Epoch : %3d, training loss : %0.4f, training accuracy : %2.2f, test loss " + \
+        logger.info(("Epoch : %3d, training loss : %0.4f, training accuracy : %2.2f, test loss " + \
         ": %0.4f, test accuracy : %2.2f") % (epoch, train_loss, train_acc, test_loss, test_acc))  
 
 
