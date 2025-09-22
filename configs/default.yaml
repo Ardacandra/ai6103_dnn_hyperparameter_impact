@@ -15,6 +15,7 @@ subset : Null
 # subset : 100
 train_batch_size : 128
 test_batch_size : 128
+data_augmentation : True
 learning_rate : 0.1
 epoch : 15
 learning_rate_schedule : False

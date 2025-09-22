@@ -30,16 +30,22 @@ def main(config_path):
     logging.info(f"starting network training...")
     logging.info(f"training parameters : {cfg}")
 
-    # these are commonly used data augmentations
-    # random cropping and random horizontal flip
-    # lastly, we normalize each channel into zero mean and unit standard deviation
-    transform_train = transforms.Compose([
-        transforms.RandomCrop(32, padding=4),
-        transforms.RandomHorizontalFlip(),
-        transforms.ToTensor(),
-        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-    ])
-
+    if cfg["data_augmentation"]:
+        # these are commonly used data augmentations
+        # random cropping and random horizontal flip
+        # lastly, we normalize each channel into zero mean and unit standard deviation
+        transform_train = transforms.Compose([
+            transforms.RandomCrop(32, padding=4),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+        ])
+    else :
+        transform_train = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+        ])
+    
     transform_test = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
