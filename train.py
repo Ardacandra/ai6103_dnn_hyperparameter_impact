@@ -9,6 +9,7 @@ import os
 import argparse
 import yaml
 import logging
+import matplotlib.pyplot as plt
 
 from src.model import *
 from src.helper import *
@@ -72,13 +73,48 @@ def main(config_path):
     else:
         scheduler = None
 
-
+    train_loss_hist = []
+    train_acc_hist = []
+    test_loss_hist = []
+    test_acc_hist = []
     for epoch in range(1, cfg['epoch']+1):
         train_loss, train_acc = train(epoch, net, criterion, trainloader, scheduler, cfg["device"], optimizer, logger)
         test_loss, test_acc = test(epoch, net, criterion, testloader, cfg["device"])
+
+        train_loss_hist.append(train_loss)
+        train_acc_hist.append(train_acc)
+        test_loss_hist.append(test_loss)
+        test_acc_hist.append(test_acc)
         
         logger.info(("Epoch : %3d, training loss : %0.4f, training accuracy : %2.2f, test loss " + \
         ": %0.4f, test accuracy : %2.2f") % (epoch, train_loss, train_acc, test_loss, test_acc))  
+    
+    logger.info("saving training loss and accuracy plots...")
+
+    #mkdir for plots
+    plot_path = os.path.join(cfg["output_path"], "plots/")
+    if not os.path.exists(plot_path):
+        os.mkdir(plot_path)
+
+    plt.plot(range(1, len(train_loss_hist)+1), train_loss_hist, 'b')
+    plt.plot(range(1, len(test_loss_hist)+1), test_loss_hist, 'r')
+    plt.xlabel("Number of epochs")
+    plt.ylabel("Loss")
+    # plt.title("ResNet18: Loss vs Number of epochs")
+    plt.legend(['train', 'validation'])
+    plt.savefig(os.path.join(plot_path, f"{cfg['run_id']}_train_loss.png"), bbox_inches="tight")
+    plt.close()
+
+    plt.plot(range(1, len(train_acc_hist)+1), train_acc_hist, 'b')
+    plt.plot(range(1, len(test_acc_hist)+1), test_acc_hist, 'r')
+    plt.xlabel("Number of epochs")
+    plt.ylabel("Accuracy")
+    # plt.title("ResNet18: Accuracy vs Number of epochs")
+    plt.legend(['train', 'validation'])
+    plt.savefig(os.path.join(plot_path, f"{cfg['run_id']}_train_acc.png"), bbox_inches="tight")
+    plt.close()
+
+    logger.info(f"plots saved to {plot_path}")
 
 
 if __name__ == "__main__":
