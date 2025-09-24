@@ -126,6 +126,10 @@ def main(config_path):
 
     logger.info(f"plots saved to {plot_path}")
 
+    trained_model_state_path = os.path.join(cfg["output_path"], f"{cfg['run_id']}_state_dict.pth")
+    torch.save(net.state_dict(), trained_model_state_path)
+    logger.info(f"trained model state_dict saved to {trained_model_state_path}")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
