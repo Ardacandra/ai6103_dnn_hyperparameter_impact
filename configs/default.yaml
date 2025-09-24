@@ -21,3 +21,6 @@ epoch : 15
 momentum : 0
 weight_decay : 0
 learning_rate_schedule : False
+
+#model testing parameters
+state_dict_path : "./output/test_run_state_dict.pth"
