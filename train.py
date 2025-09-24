@@ -53,7 +53,7 @@ def main(config_path):
         transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
     ])
 
-    trainloader, testloader = load_cifar_dataset(
+    trainloader, valloader, testloader = load_cifar_dataset(
         cfg["data_path"],
         transform_train,
         transform_test,

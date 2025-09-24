@@ -4,7 +4,7 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 
-from torch.utils.data import Subset
+from torch.utils.data import Subset, random_split
 
 import os
 
@@ -13,7 +13,7 @@ def load_cifar_dataset(
     transform_train,
     transform_test,
     train_batch_size=128,
-    test_batch_size=256,
+    test_batch_size=128,
     subset_size=None
 ):
     # ensure the dataset is downloaded once
@@ -33,15 +33,24 @@ def load_cifar_dataset(
     if subset_size is not None:
         trainset = Subset(trainset, range(subset_size))
         testset = Subset(testset, range(subset_size))
+    
+    #split train dataset into train and validation
+    train_size = int(0.8 * len(trainset))  # 40k train
+    val_size = len(trainset) - train_size  # 10k val
+
+    trainset, valset = random_split(trainset, [train_size, val_size], generator=torch.Generator().manual_seed(42))
 
     trainloader = torch.utils.data.DataLoader(
         trainset, batch_size=train_batch_size, shuffle=True, num_workers=2
+    )
+    valloader = torch.utils.data.DataLoader(
+        valset, batch_size=train_batch_size, shuffle=False, num_workers=2
     )
     testloader = torch.utils.data.DataLoader(
         testset, batch_size=test_batch_size, shuffle=False, num_workers=2
     )
 
-    return trainloader, testloader
+    return trainloader, valloader, testloader
 
 # Training
 def train(epoch, net, criterion, trainloader, scheduler, device, optimizer, logger):

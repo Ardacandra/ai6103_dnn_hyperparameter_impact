@@ -14,7 +14,7 @@ def main(config_path):
         cfg = yaml.safe_load(f)
 
     #download cifar dataset
-    trainloader, testloader = load_cifar_dataset(
+    trainloader, valloader, testloader = load_cifar_dataset(
         root = cfg["data_path"],
         transform_train=None,
         transform_test=None,
