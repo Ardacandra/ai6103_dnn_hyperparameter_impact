@@ -75,27 +75,27 @@ def main(config_path):
 
     train_loss_hist = []
     train_acc_hist = []
-    test_loss_hist = []
-    test_acc_hist = []
+    val_loss_hist = []
+    val_acc_hist = []
     for epoch in range(1, cfg['epoch']+1):
         train_loss, train_acc = train(epoch, net, criterion, trainloader, scheduler, cfg["device"], optimizer, logger)
-        test_loss, test_acc = test(epoch, net, criterion, testloader, cfg["device"])
+        val_loss, val_acc = test(epoch, net, criterion, valloader, cfg["device"])
 
         train_loss_hist.append(train_loss)
         train_acc_hist.append(train_acc)
-        test_loss_hist.append(test_loss)
-        test_acc_hist.append(test_acc)
+        val_loss_hist.append(val_loss)
+        val_acc_hist.append(val_acc)
         
-        logger.info(("Epoch : %3d, training loss : %0.4f, training accuracy : %2.2f, test loss " + \
-        ": %0.4f, test accuracy : %2.2f") % (epoch, train_loss, train_acc, test_loss, test_acc))  
+        logger.info(("Epoch : %3d, training loss : %0.4f, training accuracy : %2.2f, validation loss " + \
+        ": %0.4f, validation accuracy : %2.2f") % (epoch, train_loss, train_acc, val_loss, val_acc))  
 
     csv_path = os.path.join(cfg["output_path"], f"{cfg['run_id']}_train_history.csv")
     df_hist = pd.DataFrame()
     df_hist['epoch'] = range(1, len(train_loss_hist)+1)
     df_hist['train_loss'] = train_loss_hist
     df_hist['train_acc'] = train_acc_hist
-    df_hist['test_loss'] = test_loss_hist
-    df_hist['test_acc'] = test_acc_hist
+    df_hist['val_loss'] = val_loss_hist
+    df_hist['val_acc'] = val_acc_hist
     df_hist.to_csv(csv_path, index=False)
     logger.info(f"training and validation loss and accuracy saved to {csv_path}")
     
@@ -107,7 +107,7 @@ def main(config_path):
         os.mkdir(plot_path)
 
     plt.plot(range(1, len(train_loss_hist)+1), train_loss_hist, 'b')
-    plt.plot(range(1, len(test_loss_hist)+1), test_loss_hist, 'r')
+    plt.plot(range(1, len(val_loss_hist)+1), val_loss_hist, 'r')
     plt.xlabel("Number of epochs")
     plt.ylabel("Loss")
     # plt.title("ResNet18: Loss vs Number of epochs")
@@ -116,7 +116,7 @@ def main(config_path):
     plt.close()
 
     plt.plot(range(1, len(train_acc_hist)+1), train_acc_hist, 'b')
-    plt.plot(range(1, len(test_acc_hist)+1), test_acc_hist, 'r')
+    plt.plot(range(1, len(val_acc_hist)+1), val_acc_hist, 'r')
     plt.xlabel("Number of epochs")
     plt.ylabel("Accuracy")
     # plt.title("ResNet18: Accuracy vs Number of epochs")
