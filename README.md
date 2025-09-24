@@ -24,4 +24,10 @@ python load_cifar.py --config configs/default.yaml
 python train.py --config configs/default.yaml
 ```
 
+3. Get the trained network result on the test set
+
+```
+python test.py --config configs/default.yaml
+```
+
 ### Results
