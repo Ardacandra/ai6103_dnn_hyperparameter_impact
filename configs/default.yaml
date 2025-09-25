@@ -18,7 +18,7 @@ test_batch_size : 128
 data_augmentation : True
 learning_rate : 0.1
 epoch : 15
-momentum : 0
+momentum : 0.9
 weight_decay : 0
 learning_rate_schedule : False
 
