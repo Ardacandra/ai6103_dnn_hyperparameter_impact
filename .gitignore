@@ -16,3 +16,6 @@ sandbox.ipynb
 
 # Ignore output files
 output/
+
+# Ignore latex files
+latex/
